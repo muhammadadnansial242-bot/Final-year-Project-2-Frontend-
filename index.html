@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O Shop - Modern Premium E-Commerce</title>
+  
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- html2canvas for Downloadable Receipt -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              accent: '#ff5e36',
+              dark: '#0f172a',
+              navy: '#1e293b'
+            }
+          },
+          boxShadow: {
+            'glow': '0 0 25px -5px rgba(249, 115, 22, 0.3)',
+            'glass': '0 8px 32px 0 rgba(15, 23, 42, 0.06)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      scroll-behavior: smooth;
+    }
+    
+    .glass-header {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .logo-ring {
+      background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 glass-header transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo -->
+        <a href="#home" class="flex items-center gap-3 group">
+          <div class="logo-ring w-11 h-11 rounded-2xl flex items-center justify-center text-white font-extrabold text-2xl tracking-tighter transform group-hover:scale-105 transition-all duration-300 relative overflow-hidden">
+            <span class="z-10">O</span>
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="font-extrabold text-xl tracking-tight text-slate-900">O SHOP</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 border border-brand-100 uppercase tracking-wider">OFFICIAL</span>
+            </div>
+            <span class="text-[11px] text-slate-400 font-medium tracking-wide">Premium Lifestyle Store</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+          <a href="#home" class="hover:text-brand-600 transition-colors">Home</a>
+          
+          <!-- Dropdown Products -->
+          <div class="relative group py-4">
+            <button class="flex items-center gap-1 hover:text-brand-600 transition-colors">
+              Products <i class="fa-solid fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+            </button>
+            <div class="absolute top-full left-0 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <button onclick="filterByGender('Men')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-sm font-medium flex items-center gap-2">
+                <i class="fa-solid fa-mars text-blue-500"></i> Men's Collection
+              </button>
+              <button onclick="filterByGender('Women')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-sm font-medium flex items-center gap-2">
+                <i class="fa-solid fa-venus text-pink-500"></i> Women's Collection
+              </button>
+              <button onclick="filterByGender('All')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-sm font-medium flex items-center gap-2 border-t border-slate-100 mt-1">
+                <i class="fa-solid fa-border-all text-slate-400"></i> View All
+              </button>
+            </div>
+          </div>
+
+          <!-- Dropdown Categories -->
+          <div class="relative group py-4">
+            <button class="flex items-center gap-1 hover:text-brand-600 transition-colors">
+              Categories <i class="fa-solid fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+            </button>
+            <div class="absolute top-full -left-12 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 grid grid-cols-1 gap-0.5">
+              <button onclick="filterByCategory('Shirts')" class="text-left px-3.5 py-2 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-xs font-medium">Shirts</button>
+              <button onclick="filterByCategory('Pants')" class="text-left px-3.5 py-2 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-xs font-medium">Pants</button>
+              <button onclick="filterByCategory('Trousers')" class="text-left px-3.5 py-2 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-xs font-medium">Trousers</button>
+              <button onclick="filterByCategory('Watches')" class="text-left px-3.5 py-2 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-xs font-medium">Watches</button>
+              <button onclick="filterByCategory('Accessories')" class="text-left px-3.5 py-2 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-xs font-medium">Accessories</button>
+              <button onclick="filterByCategory('Shoes')" class="text-left px-3.5 py-2 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-xs font-medium">Shoes</button>
+              <button onclick="filterByCategory('Chains')" class="text-left px-3.5 py-2 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-xs font-medium">Chains</button>
+              <button onclick="filterByCategory('Necklaces')" class="text-left px-3.5 py-2 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition-colors text-slate-700 text-xs font-medium">Necklaces</button>
+            </div>
+          </div>
+
+          <a href="#contact" class="hover:text-brand-600 transition-colors">Contact Us</a>
+        </nav>
+
+        <!-- Right Quick Actions -->
+        <div class="flex items-center gap-3">
+          <!-- Quick Search -->
+          <div class="relative hidden sm:block">
+            <input type="text" id="headerSearch" onkeyup="handleHeaderSearch(event)" placeholder="Search products..." class="w-48 xl:w-64 pl-9 pr-4 py-2 bg-slate-100 border border-transparent rounded-full text-xs font-medium focus:outline-none focus:bg-white focus:border-brand-500 transition-all duration-200">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          </div>
+
+          <!-- Wishlist Counter -->
+          <button onclick="toggleWishlistModal()" class="relative w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition-colors">
+            <i class="fa-regular fa-heart text-base"></i>
+            <span id="wishlistCount" class="absolute -top-1 -right-1 w-5 h-5 bg-brand-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow-sm">0</span>
+          </button>
+
+          <!-- Cart Drawer Icon -->
+          <button onclick="openCartDrawer()" class="relative w-10 h-10 rounded-full bg-slate-900 text-white hover:bg-brand-600 flex items-center justify-center transition-colors shadow-sm">
+            <i class="fa-solid fa-bag-shopping text-sm"></i>
+            <span id="cartBadge" class="absolute -top-1 -right-1 w-5 h-5 bg-brand-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center border-2 border-white shadow-sm">0</span>
+          </button>
+
+          <!-- Admin Access Button -->
+          <button onclick="openAdminModal()" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 text-xs font-bold transition-all duration-200">
+            <i class="fa-solid fa-lock text-[11px]"></i>
+            <span>Admin</span>
+          </button>
+
+          <!-- Mobile Menu Toggle -->
+          <button onclick="toggleMobileMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Overlay -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-3">
+      <div class="relative mb-3">
+        <input type="text" id="mobileHeaderSearch" onkeyup="handleHeaderSearch(event)" placeholder="Search products..." class="w-full pl-9 pr-4 py-2 bg-slate-100 rounded-full text-xs font-medium focus:outline-none">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+      </div>
+      <a href="#home" onclick="toggleMobileMenu()" class="block font-semibold text-slate-700 hover:text-brand-500 text-sm py-1">Home</a>
+      <div class="font-semibold text-slate-400 text-xs uppercase tracking-wider pt-2">Collections</div>
+      <div class="grid grid-cols-2 gap-2 text-xs font-medium text-slate-600">
+        <button onclick="filterByGender('Men'); toggleMobileMenu()" class="text-left py-1.5 px-2 bg-slate-50 rounded-lg">Men's Apparel</button>
+        <button onclick="filterByGender('Women'); toggleMobileMenu()" class="text-left py-1.5 px-2 bg-slate-50 rounded-lg">Women's Apparel</button>
+      </div>
+      <div class="font-semibold text-slate-400 text-xs uppercase tracking-wider pt-2">Categories</div>
+      <div class="grid grid-cols-2 gap-2 text-xs font-medium text-slate-600">
+        <button onclick="filterByCategory('Shirts'); toggleMobileMenu()" class="text-left py-1 px-2">Shirts</button>
+        <button onclick="filterByCategory('Pants'); toggleMobileMenu()" class="text-left py-1 px-2">Pants</button>
+        <button onclick="filterByCategory('Watches'); toggleMobileMenu()" class="text-left py-1 px-2">Watches</button>
+        <button onclick="filterByCategory('Accessories'); toggleMobileMenu()" class="text-left py-1 px-2">Accessories</button>
+        <button onclick="filterByCategory('Shoes'); toggleMobileMenu()" class="text-left py-1 px-2">Shoes</button>
+        <button onclick="filterByCategory('Chains'); toggleMobileMenu()" class="text-left py-1 px-2">Chains</button>
+      </div>
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <a href="#contact" onclick="toggleMobileMenu()" class="text-sm font-semibold text-slate-700">Contact Us</a>
+        <button onclick="openAdminModal(); toggleMobileMenu()" class="px-4 py-1.5 bg-slate-900 text-white rounded-full text-xs font-bold">Admin Portal</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    
+    <!-- ==================== HERO BANNER SECTION ==================== -->
+    <section id="home" class="relative overflow-hidden pt-10 pb-16 md:py-24 bg-gradient-to-b from-slate-50 via-white to-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          
+          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-600 text-xs font-bold tracking-wide">
+              <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+              NEW SEASON COLLECTION 2026
+            </div>
+            
+            <h1 id="heroTitle" class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+              Shop Smart. <br>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-500">Elevate Your Style.</span>
+            </h1>
+
+            <p id="heroSubtitle" class="text-slate-600 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 font-medium">
+              Explore authentic premium apparel, designer accessories, high-end watches, and luxury footwear curated for the modern aesthetic.
+            </p>
+
+            <!-- Integrated Quick Search Bar -->
+            <div class="pt-2 max-w-lg mx-auto lg:mx-0">
+              <div class="p-2 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200 flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 pl-3 text-sm"></i>
+                <input type="text" id="heroSearchInput" placeholder="What are you looking for today? (e.g. Leather Watch, Denim)..." class="w-full bg-transparent text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none">
+                <button onclick="executeHeroSearch()" class="px-5 py-3 bg-slate-900 hover:bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-md shrink-0">
+                  Search
+                </button>
+              </div>
+            </div>
+
+            <!-- CTA Buttons & Trust Badges -->
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+              <a href="#catalog" class="px-7 py-3.5 rounded-2xl bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5">
+                Explore Catalog <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+              </a>
+              <a href="#contact" class="px-7 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-bold transition-all">
+                Contact Us
+              </a>
+            </div>
+
+            <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200/80 max-w-md mx-auto lg:mx-0 text-center lg:text-left">
+              <div>
+                <p class="font-extrabold text-slate-900 text-xl sm:text-2xl">100%</p>
+                <p class="text-xs text-slate-500 font-medium">Authentic Goods</p>
+              </div>
+              <div>
+                <p class="font-extrabold text-slate-900 text-xl sm:text-2xl">24/7</p>
+                <p class="text-xs text-slate-500 font-medium">Customer Support</p>
+              </div>
+              <div>
+                <p class="font-extrabold text-slate-900 text-xl sm:text-2xl">Fast</p>
+                <p class="text-xs text-slate-500 font-medium">Nationwide Delivery</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Hero Graphic Showcase -->
+          <div class="lg:col-span-5 relative">
+            <div class="relative mx-auto max-w-md lg:max-w-none">
+              <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-200 relative group">
+                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=800" alt="O Shop Fashion" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6 text-white p-4 glass-card rounded-2xl backdrop-blur-md bg-white/20 border-white/30 text-slate-900">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-xs font-semibold text-slate-200 uppercase tracking-wider">Top Trending</p>
+                      <p class="font-bold text-white text-base">Signature Chronograph Watch</p>
+                    </div>
+                    <span class="px-3 py-1 bg-white text-slate-900 text-xs font-black rounded-full shadow">PKR 14,999</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Floating Pill -->
+              <div class="absolute -top-6 -left-6 bg-white p-3.5 rounded-2xl shadow-xl border border-slate-100 hidden sm:flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-slate-800">Free Express Shipping</p>
+                  <p class="text-[10px] text-slate-500">On orders over PKR 5,000</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FEATURED CATEGORY GRID ==================== -->
+    <section class="py-12 bg-white border-y border-slate-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Explore Categories</h2>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Find exactly what you are looking for</p>
+          </div>
+          <button onclick="filterByCategory('All')" class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1">
+            View All <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4">
+          <button onclick="filterByCategory('Shirts')" class="group p-4 rounded-2xl bg-slate-50 hover:bg-brand-50 border border-slate-100 hover:border-brand-200 transition-all text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-700 group-hover:text-brand-600 text-lg mb-2 transition-colors">
+              <i class="fa-solid fa-shirt"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800 group-hover:text-brand-600">Shirts</span>
+          </button>
+
+          <button onclick="filterByCategory('Pants')" class="group p-4 rounded-2xl bg-slate-50 hover:bg-brand-50 border border-slate-100 hover:border-brand-200 transition-all text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-700 group-hover:text-brand-600 text-lg mb-2 transition-colors">
+              <i class="fa-solid fa-user-ninja"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800 group-hover:text-brand-600">Pants</span>
+          </button>
+
+          <button onclick="filterByCategory('Trousers')" class="group p-4 rounded-2xl bg-slate-50 hover:bg-brand-50 border border-slate-100 hover:border-brand-200 transition-all text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-700 group-hover:text-brand-600 text-lg mb-2 transition-colors">
+              <i class="fa-solid fa-socks"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800 group-hover:text-brand-600">Trousers</span>
+          </button>
+
+          <button onclick="filterByCategory('Watches')" class="group p-4 rounded-2xl bg-slate-50 hover:bg-brand-50 border border-slate-100 hover:border-brand-200 transition-all text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-700 group-hover:text-brand-600 text-lg mb-2 transition-colors">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800 group-hover:text-brand-600">Watches</span>
+          </button>
+
+          <button onclick="filterByCategory('Accessories')" class="group p-4 rounded-2xl bg-slate-50 hover:bg-brand-50 border border-slate-100 hover:border-brand-200 transition-all text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-700 group-hover:text-brand-600 text-lg mb-2 transition-colors">
+              <i class="fa-solid fa-glasses"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800 group-hover:text-brand-600">Accessories</span>
+          </button>
+
+          <button onclick="filterByCategory('Shoes')" class="group p-4 rounded-2xl bg-slate-50 hover:bg-brand-50 border border-slate-100 hover:border-brand-200 transition-all text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-700 group-hover:text-brand-600 text-lg mb-2 transition-colors">
+              <i class="fa-solid fa-shoe-prints"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800 group-hover:text-brand-600">Shoes</span>
+          </button>
+
+          <button onclick="filterByCategory('Chains')" class="group p-4 rounded-2xl bg-slate-50 hover:bg-brand-50 border border-slate-100 hover:border-brand-200 transition-all text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-700 group-hover:text-brand-600 text-lg mb-2 transition-colors">
+              <i class="fa-solid fa-[#0f172a] fa-link"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800 group-hover:text-brand-600">Chains</span>
+          </button>
+
+          <button onclick="filterByCategory('Necklaces')" class="group p-4 rounded-2xl bg-slate-50 hover:bg-brand-50 border border-slate-100 hover:border-brand-200 transition-all text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-700 group-hover:text-brand-600 text-lg mb-2 transition-colors">
+              <i class="fa-solid fa-gem"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800 group-hover:text-brand-600">Necklaces</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MAIN CATALOG & FILTERS ==================== -->
+    <section id="catalog" class="py-16 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Filter Bar Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+          <div>
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Our Collection</h2>
+            <p class="text-slate-500 text-sm mt-1">Browse through our curated inventory with verified pricing</p>
+          </div>
+
+          <!-- Multi-Category & Gender Filter Tabs -->
+          <div class="flex flex-wrap items-center gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
+            <button onclick="setFilter('All')" id="tab-All" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-900 text-white shadow-sm">All</button>
+            <button onclick="setFilter('Men')" id="tab-Men" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Men</button>
+            <button onclick="setFilter('Women')" id="tab-Women" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Women</button>
+            <div class="h-4 w-px bg-slate-200 my-auto"></div>
+            <button onclick="setFilter('Shirts')" id="tab-Shirts" class="filter-btn px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Shirts</button>
+            <button onclick="setFilter('Pants')" id="tab-Pants" class="filter-btn px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Pants</button>
+            <button onclick="setFilter('Trousers')" id="tab-Trousers" class="filter-btn px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Trousers</button>
+            <button onclick="setFilter('Watches')" id="tab-Watches" class="filter-btn px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Watches</button>
+            <button onclick="setFilter('Accessories')" id="tab-Accessories" class="filter-btn px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Accessories</button>
+            <button onclick="setFilter('Shoes')" id="tab-Shoes" class="filter-btn px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Shoes</button>
+            <button onclick="setFilter('Chains')" id="tab-Chains" class="filter-btn px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Chains</button>
+            <button onclick="setFilter('Necklaces')" id="tab-Necklaces" class="filter-btn px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all">Necklaces</button>
+          </div>
+        </div>
+
+        <!-- Product Cards Grid -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <!-- Dynamically Populated via JavaScript -->
+        </div>
+
+        <div id="noProductsFound" class="hidden text-center py-20 bg-white rounded-3xl border border-slate-200">
+          <i class="fa-solid fa-box-open text-4xl text-slate-300 mb-3"></i>
+          <p class="text-base font-bold text-slate-800">No products match your criteria</p>
+          <p class="text-xs text-slate-500 mt-1">Try resetting your filter or searching for another term</p>
+          <button onclick="setFilter('All')" class="mt-4 px-5 py-2 bg-slate-900 text-white rounded-full text-xs font-bold">Reset Filters</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT US SECTION ==================== -->
+    <section id="contact" class="py-20 bg-white border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-16">
+          <span class="px-3 py-1 rounded-full bg-brand-50 text-brand-600 text-xs font-bold uppercase tracking-wider">Get In Touch</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-2">We'd Love To Hear From You</h2>
+          <p class="text-slate-500 text-sm mt-2">Have a question about an order, size availability, or custom delivery? Contact our official line directly.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Contact Cards Info -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200/80 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-brand-500 text-white flex items-center justify-center text-xl shrink-0 shadow-md">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Official Helpline</p>
+                <a href="tel:03051022038" class="text-lg font-extrabold text-slate-900 hover:text-brand-600 transition-colors">03051022038</a>
+                <p class="text-xs text-slate-500 mt-1">Available Mon - Sat, 9am - 10pm PKT</p>
+              </div>
+            </div>
+
+            <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200/80 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center text-xl shrink-0 shadow-md">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Direct Email Support</p>
+                <a href="mailto:adnanqadir006@gmail.com" class="text-sm font-extrabold text-slate-900 hover:text-brand-600 transition-colors break-all">adnanqadir006@gmail.com</a>
+                <p class="text-xs text-slate-500 mt-1">Expect a response within 2-4 hours</p>
+              </div>
+            </div>
+
+            <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200/80 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-green-600 text-white flex items-center justify-center text-xl shrink-0 shadow-md">
+                <i class="fa-brands fa-whatsapp"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Instant WhatsApp</p>
+                <a href="https://wa.me/923051022038" target="_blank" class="text-sm font-extrabold text-slate-900 hover:text-green-600 transition-colors">Chat on WhatsApp</a>
+                <p class="text-xs text-slate-500 mt-1">Fast order tracking and instant replies</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="lg:col-span-7 bg-slate-50 p-8 rounded-3xl border border-slate-200">
+            <h3 class="text-xl font-bold text-slate-900 mb-6">Send Us a Direct Message</h3>
+            <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1.5">Your Name</label>
+                  <input type="text" required placeholder="John Doe" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1.5">Phone Number</label>
+                  <input type="tel" required placeholder="03001234567" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-brand-500">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Email Address</label>
+                <input type="email" required placeholder="you@example.com" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Message</label>
+                <textarea rows="4" required placeholder="Describe your query or order details..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-brand-500"></textarea>
+              </div>
+              <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-brand-600 text-white font-bold rounded-xl text-xs transition-colors shadow-md">
+                Send Message
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-slate-900 text-white pt-16 pb-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+        
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-white text-slate-900 flex items-center justify-center font-extrabold text-xl">O</div>
+            <span class="font-extrabold text-xl tracking-tight text-white">O SHOP</span>
+          </div>
+          <p class="text-xs text-slate-400 max-w-sm leading-relaxed">
+            Your premier destination for high-grade apparel, luxury chronographs, footwear, and designer jewelry. Authentic quality delivered nationwide.
+          </p>
+          <div class="flex gap-3 text-slate-400">
+            <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors text-xs"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors text-xs"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors text-xs"><i class="fa-brands fa-tiktok"></i></a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4">Quick Links</h4>
+          <ul class="space-y-2 text-xs text-slate-400 font-medium">
+            <li><a href="#home" class="hover:text-white transition-colors">Home</a></li>
+            <li><a href="#catalog" class="hover:text-white transition-colors">Shop All Products</a></li>
+            <li><a href="#contact" class="hover:text-white transition-colors">Contact Support</a></li>
+            <li><button onclick="openAdminModal()" class="hover:text-white transition-colors text-left">Admin Login</button></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4">Categories</h4>
+          <ul class="space-y-2 text-xs text-slate-400 font-medium">
+            <li><button onclick="filterByCategory('Shirts')" class="hover:text-white">Shirts & Polos</button></li>
+            <li><button onclick="filterByCategory('Watches')" class="hover:text-white">Luxury Watches</button></li>
+            <li><button onclick="filterByCategory('Shoes')" class="hover:text-white">Footwear</button></li>
+            <li><button onclick="filterByCategory('Chains')" class="hover:text-white">Chains & Jewelry</button></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4">Customer Care</h4>
+          <p class="text-xs text-slate-400 mb-1"><i class="fa-solid fa-phone text-brand-500 mr-2"></i> 03051022038</p>
+          <p class="text-xs text-slate-400 mb-3"><i class="fa-solid fa-envelope text-brand-500 mr-2"></i> adnanqadir006@gmail.com</p>
+          <span class="inline-block px-3 py-1 bg-slate-800 text-slate-300 text-[10px] rounded-md font-mono">Cash On Delivery Available</span>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <p>&copy; 2026 O Shop. All rights reserved.</p>
+        <div class="flex gap-4">
+          <span>Privacy Policy</span>
+          <span>Terms of Service</span>
+          <span>Shipping Policy</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== CART DRAWER ==================== -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 invisible transition-all duration-300">
+    <div onclick="closeCartDrawer()" id="cartBackdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm opacity-0 transition-opacity"></div>
+    <div id="cartPanel" class="absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
+      
+      <!-- Drawer Header -->
+      <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-bag-shopping text-brand-500 text-lg"></i>
+          <h3 class="font-extrabold text-slate-900 text-lg">Your Shopping Cart</h3>
+          <span id="drawerCartCount" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">0</span>
+        </div>
+        <button onclick="closeCartDrawer()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Drawer Content -->
+      <div id="cartItemsList" class="flex-grow overflow-y-auto p-6 space-y-4">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Drawer Footer / Checkout CTA -->
+      <div class="p-6 border-t border-slate-100 bg-slate-50 space-y-4">
+        <div class="space-y-1.5 text-xs text-slate-600">
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span id="cartSubtotal" class="font-bold text-slate-900">PKR 0</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Estimated Delivery Fee</span>
+            <span id="cartShipping" class="font-bold text-slate-900">PKR 0</span>
+          </div>
+          <div class="flex justify-between text-sm font-extrabold text-slate-900 pt-2 border-t border-slate-200">
+            <span>Total Payable</span>
+            <span id="cartTotal" class="text-brand-600">PKR 0</span>
+          </div>
+        </div>
+
+        <button onclick="openCheckoutModal()" id="checkoutBtn" disabled class="w-full py-3.5 bg-brand-500 hover:bg-brand-600 disabled:bg-slate-300 text-white rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2">
+          Proceed to Checkout <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== QUICK VIEW MODAL ==================== -->
+  <div id="quickViewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="closeQuickView()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 text-xs z-10">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="quickViewContent" class="grid sm:grid-cols-2 gap-6">
+        <!-- Dynamic Quick View details -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHECKOUT MODAL ==================== -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl my-8">
+      <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-xs">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="mb-6">
+        <span class="text-[10px] font-bold uppercase tracking-widest text-brand-600">Final Step</span>
+        <h3 class="text-2xl font-extrabold text-slate-900">Complete Order</h3>
+        <p class="text-xs text-slate-500">Provide shipping information to finalize your purchase</p>
+      </div>
+
+      <form onsubmit="processOrderPlacement(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
+          <input type="text" id="custName" required placeholder="e.g. Adnan Qadir" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Phone Number (WhatsApp) *</label>
+          <input type="tel" id="custPhone" required placeholder="03051022038" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Delivery Address *</label>
+          <textarea id="custAddress" rows="2" required placeholder="Street address, City, Postal Code" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-brand-500"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Payment Method</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="p-3 border-2 border-brand-500 rounded-xl bg-brand-50/30 flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="paymentMethod" value="COD" checked class="text-brand-500">
+              <div>
+                <p class="text-xs font-bold text-slate-900">Cash on Delivery</p>
+                <p class="text-[10px] text-slate-500">Pay upon delivery</p>
+              </div>
+            </label>
+            <label class="p-3 border border-slate-200 rounded-xl bg-slate-50 flex items-center gap-2 cursor-pointer opacity-60">
+              <input type="radio" name="paymentMethod" value="Online" disabled class="text-brand-500">
+              <div>
+                <p class="text-xs font-bold text-slate-900">Online Transfer</p>
+                <p class="text-[10px] text-slate-500">Easypaisa / JazzCash</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-brand-600 text-white rounded-xl font-bold text-xs transition-colors shadow-lg">
+            Confirm & Generate Order
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== SUCCESS / RECEIPT DOWNLOAD MODAL ==================== -->
+  <div id="receiptModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl my-8 text-center">
+      
+      <!-- Receipt Container for html2canvas -->
+      <div id="receiptCanvasCard" class="p-6 bg-white rounded-2xl border border-slate-200 text-left mb-6 shadow-sm">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center font-extrabold text-sm">O</div>
+            <span class="font-extrabold text-slate-900 text-base">O SHOP RECEIPT</span>
+          </div>
+          <span id="receiptOrderNum" class="text-[11px] font-mono font-bold text-slate-500">#ORD-0000</span>
+        </div>
+
+        <div class="py-3 text-xs space-y-1 border-b border-slate-100">
+          <p><span class="text-slate-400">Date:</span> <span id="receiptDate" class="font-semibold text-slate-800">Oct 26, 2026</span></p>
+          <p><span class="text-slate-400">Customer:</span> <span id="receiptName" class="font-semibold text-slate-800">Adnan Qadir</span></p>
+          <p><span class="text-slate-400">Phone:</span> <span id="receiptPhone" class="font-semibold text-slate-800">03051022038</span></p>
+          <p><span class="text-slate-400">Address:</span> <span id="receiptAddress" class="font-semibold text-slate-800">Main Bazaar, City</span></p>
+        </div>
+
+        <div class="py-3">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Purchased Items</p>
+          <div id="receiptItemsList" class="space-y-1.5 text-xs">
+            <!-- Rendered JS -->
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 space-y-1 text-xs">
+          <div class="flex justify-between font-extrabold text-slate-900 text-sm">
+            <span>Total Amount Paid:</span>
+            <span id="receiptTotal" class="text-brand-600">PKR 0</span>
+          </div>
+          <p class="text-[10px] text-slate-400 text-center pt-3 font-mono">Thank you for shopping with O Shop! Official Helpline: 03051022038</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3">
+        <button onclick="downloadReceiptPNG()" class="flex-1 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2">
+          <i class="fa-solid fa-download"></i> Save Receipt Image
+        </button>
+        <button onclick="closeReceiptModal()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
+          Done
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN AUTH MODAL ==================== -->
+  <div id="adminAuthModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center relative shadow-2xl border border-slate-100">
+      <button onclick="closeAdminAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-xs">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center mx-auto text-xl mb-3 shadow-md">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+
+      <h3 class="text-xl font-extrabold text-slate-900">Admin Login Guard</h3>
+      <p class="text-xs text-slate-500 mb-4">Enter password to manage inventory and view profit margins</p>
+
+      <form onsubmit="verifyAdminPass(event)" class="space-y-3">
+        <input type="password" id="adminPassInput" placeholder="Password (default: admin or 1234)" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-brand-500 text-center">
+        <p id="authError" class="text-[11px] font-bold text-red-500 hidden">Incorrect Password. Try 'admin' or '1234'</p>
+        <button type="submit" class="w-full py-3 bg-slate-900 hover:bg-brand-600 text-white rounded-xl text-xs font-bold transition-colors">
+          Authenticate & Access
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN PANEL MODAL ==================== -->
+  <div id="adminPanelModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-6xl w-full h-[90vh] flex flex-col sm:flex-row overflow-hidden shadow-2xl border border-slate-200">
+      
+      <!-- Admin Sidebar -->
+      <div class="w-full sm:w-64 bg-slate-900 text-white p-6 flex flex-col justify-between shrink-0">
+        <div>
+          <div class="flex items-center gap-3 mb-8">
+            <div class="w-9 h-9 rounded-xl bg-brand-500 text-white flex items-center justify-center font-extrabold">O</div>
+            <div>
+              <p class="font-extrabold text-sm tracking-tight">O SHOP PORTAL</p>
+              <p class="text-[10px] text-slate-400">Admin Dashboard v2.0</p>
+            </div>
+          </div>
+
+          <nav class="space-y-1.5 font-semibold text-xs text-slate-300">
+            <button onclick="switchAdminTab('dashboard')" id="admTabBtn-dashboard" class="adm-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-800 text-white">
+              <i class="fa-solid fa-chart-pie w-4"></i> Dashboard Stats
+            </button>
+            <button onclick="switchAdminTab('banner')" id="admTabBtn-banner" class="adm-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800">
+              <i class="fa-solid fa-pen-to-square w-4"></i> Banner Text Editor
+            </button>
+            <button onclick="switchAdminTab('products')" id="admTabBtn-products" class="adm-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800">
+              <i class="fa-solid fa-box-archive w-4"></i> Inventory Management
+            </button>
+            <button onclick="switchAdminTab('orders')" id="admTabBtn-orders" class="adm-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800">
+              <i class="fa-solid fa-truck-ramp-box w-4"></i> Orders & Deliveries
+            </button>
+            <button onclick="switchAdminTab('profit')" id="admTabBtn-profit" class="adm-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800">
+              <i class="fa-solid fa-file-invoice-dollar w-4"></i> Invoices & Profit Ledger
+            </button>
+          </nav>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800">
+          <button onclick="closeAdminPanel()" class="w-full py-2.5 bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-right-from-bracket"></i> Exit Admin
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Main Area -->
+      <div class="flex-grow bg-slate-50 overflow-y-auto p-6 sm:p-8">
+        
+        <!-- Tab: Dashboard -->
+        <div id="admTab-dashboard" class="adm-tab-content space-y-6">
+          <h3 class="text-2xl font-extrabold text-slate-900">Executive Overview</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-bold text-slate-400">Total Revenue</p>
+              <p id="admStatRevenue" class="text-2xl font-black text-slate-900 mt-1">PKR 0</p>
+            </div>
+            <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-bold text-slate-400">Net Profit</p>
+              <p id="admStatProfit" class="text-2xl font-black text-green-600 mt-1">PKR 0</p>
+            </div>
+            <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-bold text-slate-400">Total Orders</p>
+              <p id="admStatOrders" class="text-2xl font-black text-slate-900 mt-1">0</p>
+            </div>
+            <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-bold text-slate-400">Active Products</p>
+              <p id="admStatProducts" class="text-2xl font-black text-brand-600 mt-1">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Banner Editor -->
+        <div id="admTab-banner" class="adm-tab-content hidden space-y-6">
+          <h3 class="text-2xl font-extrabold text-slate-900">Hero Banner Text Editor</h3>
+          <div class="p-6 bg-white rounded-2xl border border-slate-200 space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Headline Text</label>
+              <input type="text" id="admBannerTitle" value="Shop Smart. Elevate Your Style." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Subtitle Description</label>
+              <textarea id="admBannerSubtitle" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium">Explore authentic premium apparel, designer accessories, high-end watches, and luxury footwear curated for the modern aesthetic.</textarea>
+            </div>
+            <button onclick="saveBannerEdits()" class="px-6 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">
+              Save Banner Changes
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab: Inventory & Product Management -->
+        <div id="admTab-products" class="adm-tab-content hidden space-y-6">
+          <div class="flex items-center justify-between">
+            <h3 class="text-2xl font-extrabold text-slate-900">Inventory Management</h3>
+            <button onclick="toggleAddProductModal()" class="px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">
+              + Add New Product
+            </button>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-x-auto shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="p-4">Item</th>
+                  <th class="p-4">Category</th>
+                  <th class="p-4">Cost Price</th>
+                  <th class="p-4">Sale Price</th>
+                  <th class="p-4">Stock</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admProductsTable">
+                <!-- Rendered JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab: Orders & Deliveries -->
+        <div id="admTab-orders" class="adm-tab-content hidden space-y-6">
+          <div class="flex items-center justify-between">
+            <h3 class="text-2xl font-extrabold text-slate-900">Orders & Deliveries</h3>
+            <input type="text" id="admOrderSearch" onkeyup="filterOrdersByPhone()" placeholder="Search customer phone..." class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs">
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-x-auto shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="p-4">Order ID</th>
+                  <th class="p-4">Customer</th>
+                  <th class="p-4">Phone</th>
+                  <th class="p-4">Total</th>
+                  <th class="p-4">Status</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admOrdersTable">
+                <!-- Rendered JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab: Invoices & Profit Ledger -->
+        <div id="admTab-profit" class="adm-tab-content hidden space-y-6">
+          <h3 class="text-2xl font-extrabold text-slate-900">Invoices & Profit Ledger</h3>
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-x-auto shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="p-4">Order ID</th>
+                  <th class="p-4">Revenue (Sale Price)</th>
+                  <th class="p-4">Cost Price</th>
+                  <th class="p-4">Net Profit Margin</th>
+                  <th class="p-4 text-right">Date</th>
+                </tr>
+              </thead>
+              <tbody id="admProfitTable">
+                <!-- Rendered JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== ADD PRODUCT MODAL ==================== -->
+  <div id="addProductModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+      <button onclick="toggleAddProductModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-xs">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 class="text-xl font-extrabold text-slate-900 mb-4">Add New Product</h3>
+
+      <form onsubmit="handleAddNewProduct(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Product Title *</label>
+          <input type="text" id="newProdTitle" required placeholder="e.g. Slim Fit Oxford Shirt" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Category *</label>
+            <select id="newProdCategory" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+              <option value="Shirts">Shirts</option>
+              <option value="Pants">Pants</option>
+              <option value="Trousers">Trousers</option>
+              <option value="Watches">Watches</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Shoes">Shoes</option>
+              <option value="Chains">Chains</option>
+              <option value="Necklaces">Necklaces</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Gender *</label>
+            <select id="newProdGender" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+              <option value="Men">Men</option>
+              <option value="Women">Women</option>
+              <option value="Both">Both / Unisex</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Cost Price (PKR) *</label>
+            <input type="number" id="newProdCost" required placeholder="1200" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Sale Price (PKR) *</label>
+            <input type="number" id="newProdPrice" required placeholder="2499" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Discount %</label>
+            <input type="number" id="newProdDiscount" placeholder="15" value="0" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Image Unsplash URL *</label>
+          <input type="url" id="newProdImg" required placeholder="https://images.unsplash.com/photo-..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-md mt-2">
+          Save Product To Catalog
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // Initial Seed Products
+    const INITIAL_PRODUCTS = [
+      { id: '1', title: "Men's Luxury Cotton Oxford Shirt", category: 'Shirts', gender: 'Men', costPrice: 1500, price: 3499, discount: 20, freeShipping: true, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&q=80&w=600', stock: 25, sizes: ['S', 'M', 'L', 'XL'] },
+      { id: '2', title: "Slim Fit Stretch Denim Pants", category: 'Pants', gender: 'Men', costPrice: 1800, price: 4299, discount: 15, freeShipping: false, image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=600', stock: 18, sizes: ['M', 'L', 'XL', 'XXL'] },
+      { id: '3', title: "Classic Stainless Chronograph Watch", category: 'Watches', gender: 'Men', costPrice: 6500, price: 14999, discount: 25, freeShipping: true, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&q=80&w=600', stock: 10, sizes: ['Standard'] },
+      { id: '4', title: "Women's Designer Silk Blouse", category: 'Shirts', gender: 'Women', costPrice: 2000, price: 4999, discount: 10, freeShipping: true, image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=600', stock: 14, sizes: ['S', 'M', 'L'] },
+      { id: '5', title: "Minimalist Silver Cuban Chain", category: 'Chains', gender: 'Both', costPrice: 800, price: 2199, discount: 30, freeShipping: false, image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=600', stock: 40, sizes: ['Standard'] },
+      { id: '6', title: "Urban Athletic Jogger Trousers", category: 'Trousers', gender: 'Men', costPrice: 1200, price: 2899, discount: 15, freeShipping: false, image: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?auto=format&fit=crop&q=80&w=600', stock: 30, sizes: ['S', 'M', 'L', 'XL'] },
+      { id: '7', title: "Luxury Rose Gold Pendant Necklace", category: 'Necklaces', gender: 'Women', costPrice: 1400, price: 3899, discount: 20, freeShipping: true, image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=600', stock: 12, sizes: ['Standard'] },
+      { id: '8', title: "Genuine Leather Business Shoes", category: 'Shoes', gender: 'Men', costPrice: 3200, price: 7999, discount: 18, freeShipping: true, image: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&q=80&w=600', stock: 8, sizes: ['M', 'L', 'XL'] }
+    ];
+
+    // Global State Application Object
+    let state = {
+      products: JSON.parse(localStorage.getItem('oshop_products')) || INITIAL_PRODUCTS,
+      cart: JSON.parse(localStorage.getItem('oshop_cart')) || [],
+      wishlist: JSON.parse(localStorage.getItem('oshop_wishlist')) || [],
+      orders: JSON.parse(localStorage.getItem('oshop_orders')) || [],
+      activeFilter: 'All',
+      searchQuery: '',
+      bannerText: JSON.parse(localStorage.getItem('oshop_banner')) || {
+        title: "Shop Smart. Elevate Your Style.",
+        subtitle: "Explore authentic premium apparel, designer accessories, high-end watches, and luxury footwear curated for the modern aesthetic."
+      }
+    };
+
+    // Initialize Web App
+    window.onload = function() {
+      saveState();
+      renderProducts();
+      updateCartUI();
+      updateWishlistUI();
+      applyBannerText();
+    };
+
+    function saveState() {
+      localStorage.setItem('oshop_products', JSON.stringify(state.products));
+      localStorage.setItem('oshop_cart', JSON.stringify(state.cart));
+      localStorage.setItem('oshop_wishlist', JSON.stringify(state.wishlist));
+      localStorage.setItem('oshop_orders', JSON.stringify(state.orders));
+      localStorage.setItem('oshop_banner', JSON.stringify(state.bannerText));
+    }
+
+    // Banner Logic
+    function applyBannerText() {
+      document.getElementById('heroTitle').innerHTML = state.bannerText.title.replace('Elevate Your Style.', '<span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-500">Elevate Your Style.</span>');
+      document.getElementById('heroSubtitle').innerText = state.bannerText.subtitle;
+    }
+
+    // Filter Logic
+    function setFilter(filter) {
+      state.activeFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+      });
+      const activeBtn = document.getElementById(`tab-${filter}`);
+      if(activeBtn) {
+        activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-sm');
+        activeBtn.classList.remove('text-slate-600');
+      }
+      renderProducts();
+    }
+
+    function filterByGender(gender) {
+      setFilter(gender);
+      document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function filterByCategory(cat) {
+      setFilter(cat);
+      document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function handleHeaderSearch(e) {
+      state.searchQuery = e.target.value.toLowerCase();
+      renderProducts();
+    }
+
+    function executeHeroSearch() {
+      const q = document.getElementById('heroSearchInput').value.toLowerCase();
+      state.searchQuery = q;
+      renderProducts();
+      document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Render Product Cards Grid
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      const noFound = document.getElementById('noProductsFound');
+      grid.innerHTML = '';
+
+      const filtered = state.products.filter(p => {
+        const matchesFilter = 
+          state.activeFilter === 'All' ? true :
+          state.activeFilter === 'Men' ? (p.gender === 'Men' || p.gender === 'Both') :
+          state.activeFilter === 'Women' ? (p.gender === 'Women' || p.gender === 'Both') :
+          p.category === state.activeFilter;
+
+        const matchesSearch = p.title.toLowerCase().includes(state.searchQuery) || p.category.toLowerCase().includes(state.searchQuery);
+
+        return matchesFilter && matchesSearch;
+      });
+
+      if(filtered.length === 0) {
+        noFound.classList.remove('hidden');
+      } else {
+        noFound.classList.add('hidden');
+      }
+
+      filtered.forEach(p => {
+        const isWish = state.wishlist.includes(p.id);
+        const card = document.createElement('div');
+        card.className = "group bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col";
+        
+        card.innerHTML = `
+          <div class="relative aspect-[4/5] bg-slate-100 overflow-hidden">
+            <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+            
+            <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+              ${p.freeShipping ? `<span class="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-extrabold shadow-sm">Free Delivery</span>` : ''}
+              ${p.discount > 0 ? `<span class="px-2.5 py-1 rounded-full bg-brand-500 text-white text-[10px] font-extrabold shadow-sm">${p.discount}% OFF</span>` : ''}
+            </div>
+
+            <button onclick="toggleWishlist('${p.id}')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-md hover:bg-white text-slate-700 flex items-center justify-center text-xs transition-colors shadow-sm">
+              <i class="${isWish ? 'fa-solid fa-heart text-red-500' : 'fa-regular fa-heart'}"></i>
+            </button>
+
+            <button onclick="openQuickView('${p.id}')" class="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 bg-slate-900/90 text-white text-xs font-bold rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-md">
+              Quick View
+            </button>
+          </div>
+
+          <div class="p-5 flex flex-col flex-grow justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                <span>${p.category}</span>
+                <span>${p.gender}</span>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm line-clamp-1 group-hover:text-brand-600 transition-colors">${p.title}</h3>
+            </div>
+
+            <!-- Size Selector Pills -->
+            <div class="flex items-center gap-1">
+              ${p.sizes.map(s => `<span class="px-2 py-0.5 rounded-md bg-slate-100 text-[10px] font-bold text-slate-600">${s}</span>`).join('')}
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+              <div>
+                <p class="text-xs text-slate-400 line-through font-medium">PKR ${Math.round(p.price * 1.25)}</p>
+                <p class="text-base font-black text-slate-900">PKR ${p.price.toLocaleString()}</p>
+              </div>
+
+              <button onclick="addToCart('${p.id}')" class="w-10 h-10 rounded-xl bg-brand-50 hover:bg-brand-500 hover:text-white text-brand-600 flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-cart-plus text-sm"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Wishlist
+    function toggleWishlist(id) {
+      if(state.wishlist.includes(id)) {
+        state.wishlist = state.wishlist.filter(x => x !== id);
+      } else {
+        state.wishlist.push(id);
+      }
+      saveState();
+      renderProducts();
+      updateWishlistUI();
+    }
+
+    function updateWishlistUI() {
+      document.getElementById('wishlistCount').innerText = state.wishlist.length;
+    }
+
+    // Cart System
+    function addToCart(id, size = 'M') {
+      const prod = state.products.find(p => p.id === id);
+      if(!prod) return;
+
+      const existing = state.cart.find(c => c.id === id && c.selectedSize === size);
+      if(existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({
+          id: prod.id,
+          title: prod.title,
+          price: prod.price,
+          costPrice: prod.costPrice,
+          image: prod.image,
+          selectedSize: size,
+          qty: 1
+        });
+      }
+
+      saveState();
+      updateCartUI();
+      openCartDrawer();
+    }
+
+    function updateCartQuantity(id, size, delta) {
+      const item = state.cart.find(c => c.id === id && c.selectedSize === size);
+      if(!item) return;
+
+      item.qty += delta;
+      if(item.qty <= 0) {
+        state.cart = state.cart.filter(c => !(c.id === id && c.selectedSize === size));
+      }
+
+      saveState();
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const list = document.getElementById('cartItemsList');
+      const badge = document.getElementById('cartBadge');
+      const countHeader = document.getElementById('drawerCartCount');
+      const subtotalEl = document.getElementById('cartSubtotal');
+      const totalEl = document.getElementById('cartTotal');
+      const checkoutBtn = document.getElementById('checkoutBtn');
+
+      list.innerHTML = '';
+      let totalQty = 0;
+      let subtotal = 0;
+
+      if(state.cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-12 text-slate-400 space-y-2">
+            <i class="fa-solid fa-basket-shopping text-3xl"></i>
+            <p class="text-xs font-bold">Your shopping cart is empty</p>
+          </div>
+        `;
+        checkoutBtn.disabled = true;
+      } else {
+        checkoutBtn.disabled = false;
+        state.cart.forEach(item => {
+          totalQty += item.qty;
+          subtotal += (item.price * item.qty);
+
+          const div = document.createElement('div');
+          div.className = "flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100";
+          div.innerHTML = `
+            <img src="${item.image}" class="w-14 h-14 rounded-xl object-cover">
+            <div class="flex-grow">
+              <p class="font-bold text-slate-800 text-xs line-clamp-1">${item.title}</p>
+              <p class="text-[10px] text-slate-500 font-semibold">Size: ${item.selectedSize} | PKR ${item.price.toLocaleString()}</p>
+              <div class="flex items-center gap-2 mt-1.5">
+                <button onclick="updateCartQuantity('${item.id}', '${item.selectedSize}', -1)" class="w-5 h-5 bg-white border border-slate-200 rounded text-xs font-bold flex items-center justify-center text-slate-600">-</button>
+                <span class="text-xs font-bold text-slate-800">${item.qty}</span>
+                <button onclick="updateCartQuantity('${item.id}', '${item.selectedSize}', 1)" class="w-5 h-5 bg-white border border-slate-200 rounded text-xs font-bold flex items-center justify-center text-slate-600">+</button>
+              </div>
+            </div>
+            <p class="font-black text-xs text-slate-900">PKR ${(item.price * item.qty).toLocaleString()}</p>
+          `;
+          list.appendChild(div);
+        });
+      }
+
+      badge.innerText = totalQty;
+      countHeader.innerText = totalQty;
+      subtotalEl.innerText = `PKR ${subtotal.toLocaleString()}`;
+      totalEl.innerText = `PKR ${subtotal.toLocaleString()}`;
+    }
+
+    // Drawer Toggles
+    function openCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      const panel = document.getElementById('cartPanel');
+      const backdrop = document.getElementById('cartBackdrop');
+
+      drawer.classList.remove('invisible');
+      setTimeout(() => {
+        backdrop.classList.add('opacity-100');
+        panel.classList.remove('translate-x-full');
+      }, 10);
+    }
+
+    function closeCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      const panel = document.getElementById('cartPanel');
+      const backdrop = document.getElementById('cartBackdrop');
+
+      backdrop.classList.remove('opacity-100');
+      panel.classList.add('translate-x-full');
+      setTimeout(() => {
+        drawer.classList.add('invisible');
+      }, 300);
+    }
+
+    function toggleMobileMenu() {
+      const m = document.getElementById('mobileMenu');
+      m.classList.toggle('hidden');
+    }
+
+    // Quick View Modal
+    function openQuickView(id) {
+      const prod = state.products.find(p => p.id === id);
+      if(!prod) return;
+
+      const modal = document.getElementById('quickViewModal');
+      const container = document.getElementById('quickViewContent');
+
+      container.innerHTML = `
+        <div class="aspect-square bg-slate-100 rounded-2xl overflow-hidden">
+          <img src="${prod.image}" class="w-full h-full object-cover">
+        </div>
+        <div class="flex flex-col justify-between space-y-4">
+          <div>
+            <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">${prod.category}</span>
+            <h3 class="text-xl font-black text-slate-900 mt-1">${prod.title}</h3>
+            <p class="text-xs text-slate-500 mt-2">High-quality ${prod.category.toLowerCase()} crafted for maximum durability, style, and fit.</p>
+          </div>
+
+          <div>
+            <p class="text-xs font-bold text-slate-700 mb-2">Available Sizes</p>
+            <div class="flex gap-2">
+              ${prod.sizes.map(s => `<button class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:border-brand-500">${s}</button>`).join('')}
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-400">Final Price</p>
+              <p class="text-2xl font-black text-slate-900">PKR ${prod.price.toLocaleString()}</p>
+            </div>
+            <button onclick="addToCart('${prod.id}'); closeQuickView();" class="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">
+              Add To Cart
+            </button>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeQuickView() {
+      document.getElementById('quickViewModal').classList.add('hidden');
+    }
+
+    // Checkout Modal
+    function openCheckoutModal() {
+      closeCartDrawer();
+      document.getElementById('checkoutModal').classList.remove('hidden');
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').classList.add('hidden');
+    }
+
+    // Process Order
+    function processOrderPlacement(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('custName').value;
+      const phone = document.getElementById('custPhone').value;
+      const address = document.getElementById('custAddress').value;
+
+      const orderId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
+      const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const totalCost = state.cart.reduce((sum, item) => sum + (item.costPrice * item.qty), 0);
+
+      const newOrder = {
+        id: orderId,
+        customerName: name,
+        phone: phone,
+        address: address,
+        items: [...state.cart],
+        totalAmount: subtotal,
+        totalCost: totalCost,
+        status: 'Approved',
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      };
+
+      state.orders.unshift(newOrder);
+      state.cart = [];
+      saveState();
+      updateCartUI();
+
+      closeCheckoutModal();
+      showReceiptModal(newOrder);
+    }
+
+    // Receipt Modal & PNG Canvas Download
+    function showReceiptModal(order) {
+      document.getElementById('receiptOrderNum').innerText = '#' + order.id;
+      document.getElementById('receiptDate').innerText = order.date;
+      document.getElementById('receiptName').innerText = order.customerName;
+      document.getElementById('receiptPhone').innerText = order.phone;
+      document.getElementById('receiptAddress').innerText = order.address;
+
+      const itemsList = document.getElementById('receiptItemsList');
+      itemsList.innerHTML = '';
+
+      order.items.forEach(i => {
+        itemsList.innerHTML += `
+          <div class="flex justify-between font-medium text-slate-700">
+            <span>${i.title} (x${i.qty})</span>
+            <span class="font-bold">PKR ${(i.price * i.qty).toLocaleString()}</span>
+          </div>
+        `;
+      });
+
+      document.getElementById('receiptTotal').innerText = `PKR ${order.totalAmount.toLocaleString()}`;
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('receiptModal').classList.add('hidden');
+    }
+
+    function downloadReceiptPNG() {
+      const card = document.getElementById('receiptCanvasCard');
+      html2canvas(card, { scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'O-Shop-Receipt.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    // Admin Auth Guard
+    function openAdminModal() {
+      document.getElementById('adminAuthModal').classList.remove('hidden');
+    }
+
+    function closeAdminAuthModal() {
+      document.getElementById('adminAuthModal').classList.add('hidden');
+    }
+
+    function verifyAdminPass(e) {
+      e.preventDefault();
+      const pass = document.getElementById('adminPassInput').value;
+      if(pass === 'admin' || pass === '1234') {
+        closeAdminAuthModal();
+        document.getElementById('adminPassInput').value = '';
+        document.getElementById('authError').classList.add('hidden');
+        renderAdminDashboard();
+        document.getElementById('adminPanelModal').classList.remove('hidden');
+      } else {
+        document.getElementById('authError').classList.remove('hidden');
+      }
+    }
+
+    function closeAdminPanel() {
+      document.getElementById('adminPanelModal').classList.add('hidden');
+    }
+
+    // Switch Admin Tabs
+    function switchAdminTab(tabName) {
+      document.querySelectorAll('.adm-tab-btn').forEach(btn => btn.classList.remove('bg-slate-800'));
+      document.querySelectorAll('.adm-tab-content').forEach(c => c.classList.add('hidden'));
+
+      document.getElementById(`admTabBtn-${tabName}`).classList.add('bg-slate-800');
+      document.getElementById(`admTab-${tabName}`).classList.remove('hidden');
+
+      if(tabName === 'dashboard') renderAdminDashboard();
+      if(tabName === 'products') renderAdminProductsTable();
+      if(tabName === 'orders') renderAdminOrdersTable();
+      if(tabName === 'profit') renderAdminProfitLedger();
+    }
+
+    // Render Admin Stats
+    function renderAdminDashboard() {
+      const rev = state.orders.reduce((sum, o) => sum + o.totalAmount, 0);
+      const cost = state.orders.reduce((sum, o) => sum + o.totalCost, 0);
+      const profit = rev - cost;
+
+      document.getElementById('admStatRevenue').innerText = `PKR ${rev.toLocaleString()}`;
+      document.getElementById('admStatProfit').innerText = `PKR ${profit.toLocaleString()}`;
+      document.getElementById('admStatOrders').innerText = state.orders.length;
+      document.getElementById('admStatProducts').innerText = state.products.length;
+    }
+
+    // Save Banner Edits
+    function saveBannerEdits() {
+      state.bannerText.title = document.getElementById('admBannerTitle').value;
+      state.bannerText.subtitle = document.getElementById('admBannerSubtitle').value;
+      saveState();
+      applyBannerText();
+      alert('Banner updated successfully!');
+    }
+
+    // Render Admin Products
+    function renderAdminProductsTable() {
+      const tbody = document.getElementById('admProductsTable');
+      tbody.innerHTML = '';
+
+      state.products.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-slate-100 hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="p-4 flex items-center gap-3">
+            <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover">
+            <span class="font-bold text-slate-800">${p.title}</span>
+          </td>
+          <td class="p-4 text-slate-600 font-medium">${p.category}</td>
+          <td class="p-4 font-semibold text-slate-500">PKR ${p.costPrice.toLocaleString()}</td>
+          <td class="p-4 font-bold text-slate-900">PKR ${p.price.toLocaleString()}</td>
+          <td class="p-4 font-bold text-slate-700">${p.stock}</td>
+          <td class="p-4 text-right space-x-2">
+            <button onclick="deleteProduct('${p.id}')" class="px-2.5 py-1 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-lg transition-colors font-bold text-[10px]">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function toggleAddProductModal() {
+      document.getElementById('addProductModal').classList.toggle('hidden');
+    }
+
+    function handleAddNewProduct(e) {
+      e.preventDefault();
+      const newP = {
+        id: Date.now().toString(),
+        title: document.getElementById('newProdTitle').value,
+        category: document.getElementById('newProdCategory').value,
+        gender: document.getElementById('newProdGender').value,
+        costPrice: Number(document.getElementById('newProdCost').value),
+        price: Number(document.getElementById('newProdPrice').value),
+        discount: Number(document.getElementById('newProdDiscount').value) || 0,
+        freeShipping: true,
+        image: document.getElementById('newProdImg').value,
+        stock: 20,
+        sizes: ['S', 'M', 'L', 'XL']
+      };
+
+      state.products.unshift(newP);
+      saveState();
+      renderProducts();
+      renderAdminProductsTable();
+      toggleAddProductModal();
+    }
+
+    function deleteProduct(id) {
+      state.products = state.products.filter(p => p.id !== id);
+      saveState();
+      renderProducts();
+      renderAdminProductsTable();
+    }
+
+    // Render Admin Orders
+    function renderAdminOrdersTable(filtered = null) {
+      const tbody = document.getElementById('admOrdersTable');
+      tbody.innerHTML = '';
+      const list = filtered || state.orders;
+
+      list.forEach(o => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-slate-100 hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="p-4 font-mono font-bold text-slate-700">#${o.id}</td>
+          <td class="p-4 font-bold text-slate-900">${o.customerName}</td>
+          <td class="p-4 text-slate-600 font-medium">${o.phone}</td>
+          <td class="p-4 font-black text-brand-600">PKR ${o.totalAmount.toLocaleString()}</td>
+          <td class="p-4"><span class="px-2.5 py-1 bg-green-50 text-green-600 font-bold rounded-full text-[10px]">${o.status}</span></td>
+          <td class="p-4 text-right">
+            <button onclick='showReceiptModal(${JSON.stringify(o)})' class="px-3 py-1 bg-slate-900 text-white rounded-lg text-[10px] font-bold">Receipt</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterOrdersByPhone() {
+      const query = document.getElementById('admOrderSearch').value;
+      const filtered = state.orders.filter(o => o.phone.includes(query));
+      renderAdminOrdersTable(filtered);
+    }
+
+    // Render Profit Ledger
+    function renderAdminProfitLedger() {
+      const tbody = document.getElementById('admProfitTable');
+      tbody.innerHTML = '';
+
+      state.orders.forEach(o => {
+        const profit = o.totalAmount - o.totalCost;
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-slate-100 hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="p-4 font-mono font-bold text-slate-700">#${o.id}</td>
+          <td class="p-4 font-bold text-slate-900">PKR ${o.totalAmount.toLocaleString()}</td>
+          <td class="p-4 font-semibold text-slate-500">PKR ${o.totalCost.toLocaleString()}</td>
+          <td class="p-4 font-black text-green-600">+PKR ${profit.toLocaleString()}</td>
+          <td class="p-4 text-right text-slate-400 font-medium">${o.date}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      alert('Thank you! Your message has been sent to adnanqadir006@gmail.com.');
+    }
+  </script>
+</body>
+</html>
